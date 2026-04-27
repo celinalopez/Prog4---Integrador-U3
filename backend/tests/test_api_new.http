@@ -1,0 +1,64 @@
+@baseUrl = http://127.0.0.1:8000
+
+### 1) Crear proveedor válido
+POST {{baseUrl}}/proveedores
+Content-Type: application/json
+
+{
+  "nombre": "Insumos Juan SA",
+  "email_contacto": "compras@insumosjuan.com",
+  "telefono": "11-4567-8901",
+  "ciudad": "Buenos Aires",
+  "categoria": "insumos",
+  "calificacion": 10,
+  "estado": "activo",
+  "cuit": "30-71234567-8"
+}
+
+### 2) Listar con filtros avanzados (query params)
+GET {{baseUrl}}/proveedores?nombre=Insumos&ciudad=Buenos%20Aires&estado=activo&calificacion_min=3&calificacion_max=5
+Accept: application/json
+
+### 3) Obtener por id
+GET {{baseUrl}}/proveedores/1
+Accept: application/json
+
+### 4) Actualizar parcialmente proveedor
+PATCH {{baseUrl}}/proveedores/1
+Content-Type: application/json
+
+{
+  "calificacion": 10,
+  "telefono": "11 5555 0000"
+}
+
+### 5) Error de negocio: dominio temporal bloqueado (422)
+POST {{baseUrl}}/proveedores
+Content-Type: application/json
+
+{
+  "nombre": "Proveedor Temporal",
+  "email_contacto": "contacto@mailinator.com",
+  "telefono": "11-9999-9999",
+  "ciudad": "Cordoba",
+  "categoria": "servicios",
+  "calificacion": 4,
+  "estado": "activo",
+  "cuit": "30-70000000-1"
+}
+
+### 6) Error de negocio: rango inválido de calificación (422)
+GET {{baseUrl}}/proveedores?calificacion_min=5&calificacion_max=2
+Accept: application/json
+
+### 7) Inactivar proveedor (paso previo a eliminación)
+PATCH {{baseUrl}}/proveedores/1
+Content-Type: application/json
+
+{
+  "estado": "inactivo"
+}
+
+### 8) Eliminar proveedor inactivo (204)
+DELETE {{baseUrl}}/proveedores/1
+Accept: application/json
