@@ -1,0 +1,20 @@
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class CategoriaBase(BaseModel):
+    nombre: str = Field(..., min_length=2)
+    descripcion: str = Field(..., min_length=2)
+
+
+class CategoriaCreate(CategoriaBase):
+    pass
+
+
+class CategoriaUpdate(CategoriaBase):
+    pass
+
+
+class CategoriaRead(CategoriaBase):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
